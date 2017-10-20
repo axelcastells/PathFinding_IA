@@ -45,9 +45,12 @@ int main(int argc, char ** argv)
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_2)
 			{
+				delete(curr_scene);
+				
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_3)
 			{
+				delete(curr_scene);
 			}
 			if ((event.key.keysym.scancode == SDL_SCANCODE_Q) || (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 			{
