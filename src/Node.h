@@ -8,9 +8,7 @@ class Node
 public:
 	Node();
 	~Node();
-	inline std::vector<Node*> GetNodes() { return connectedNodes; };
 	inline int GetCost() { return cost; };
 private:
-	std::vector<Node*> connectedNodes;
 	int cost;
 };

@@ -2,9 +2,9 @@
 Graph::Graph(){}
 Graph::Graph(std::vector<std::vector<int>> terrain)
 {
-	for(int i = 0; i < terrain.size; i++)
+	for(int i = 0; i < (int)terrain.size(); i++)
 	{
-		for (int j = 0; j < terrain[i].size; j++)
+		for (int j = 0; j < (int)terrain[i].size(); j++)
 		{
 			if (terrain[i][j] == 1)
 			{
@@ -12,9 +12,25 @@ Graph::Graph(std::vector<std::vector<int>> terrain)
 			}
 		}
 	}
-
 }
-std::vector<Node*> Graph::GetConnections(Node* n)
+
+Graph::~Graph() {}
+
+void Graph::setGraph(std::vector<std::vector<int>> terrain){
+	for (int i = 0; i < (int)terrain.size(); i++)
+	{
+		for (int j = 0; j < (int)terrain[i].size(); j++)
+		{
+			if (terrain[i][j] == 1)
+			{
+				Node* dummy;
+				nodes[i].push_back(dummy);
+			}
+		}
+	}
+}
+
+std::vector<Connection*> Graph::GetConnections(Node* n)
 {
-	
+	return std::vector<Connection*>();
 }
