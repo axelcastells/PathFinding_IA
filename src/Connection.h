@@ -1,10 +1,14 @@
 #pragma once
-#include "Node.h"
+#include "Vector2D.h"
 class Connection
 {
 public:
 	Connection();
 	float GetCost();
-	Node* GetFromNode();
-	Node* GetToNode();
+	Vector2D* GetFromNode();
+	Vector2D* GetToNode();
+private:
+	float cost;
+	Vector2D* fromNode;
+	Vector2D* toNode;
 };

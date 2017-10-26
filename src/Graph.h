@@ -1,15 +1,19 @@
 #pragma once
-#include "Node.h"
 #include "Connection.h"
+#include "Vector2D.h"
+#include <vector>
 class Graph
 {
 public:
 	Graph();
-	Graph(std::vector<std::vector<int>> terrain);
-
-	std::vector<Connection*> GetConnections(Node* fromNode);
-	void setGraph(std::vector<std::vector<int>> terrain);
 	~Graph();
+
+	void AddNode(Vector2D node);
+
+	void GenerateConnections();
+	std::vector<Connection*> GetConnections(Vector2D fromNode);
+
 private:
-	std::vector<std::vector<Node*>> nodes;
+	std::vector<Vector2D> nodes;
+	std::vector<Connection*> connections;
 };

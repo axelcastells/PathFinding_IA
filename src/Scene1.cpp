@@ -9,10 +9,9 @@ Scene1::Scene1()
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
 	initMaze();
+	terrainGraph = Graph();
 	loadTextures("../res/maze.png", "../res/coin.png");
-	terrainGraph.setGraph(terrain);
 	srand((unsigned int)time(NULL));
-
 	Agent *agent = new Agent;
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agents.push_back(agent);
@@ -51,6 +50,7 @@ Scene1::~Scene1()
 void Scene1::update(float dtime, SDL_Event *event)
 {
 	/* Keyboard & Mouse events */
+	
 	switch (event->type) {
 	case SDL_KEYDOWN:
 		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
@@ -259,6 +259,7 @@ void Scene1::initMaze()
 	}
 	// (2nd) set to zero all cells that belong to a wall
 	int offset = CELL_SIZE / 2;
+
 	for (int i = 0; i < num_cell_x; i++)
 	{
 		for (int j = 0; j < num_cell_y; j++)
@@ -271,8 +272,18 @@ void Scene1::initMaze()
 					terrain[i][j] = 0;
 					break;
 				}
+
 			}
 
+		}
+	}
+	for (int i = 0; i < num_cell_x; i++)
+	{
+		for (int j = 0; j < num_cell_y; j++)
+		{
+			if (terrain[i][j] != 0) {
+				//comprovar 4 veins
+			}
 		}
 	}
 
