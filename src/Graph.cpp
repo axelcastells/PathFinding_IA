@@ -2,15 +2,13 @@
 Graph::Graph(){}
 Graph::~Graph() {}
 
-void Graph::AddNode(Vector2D node)
+void Graph::addConnection(Vector2D *fromNode, Vector2D *toNode, float cost)
 {
-	nodes.push_back(node);
+	connections.push_back(new Connection(fromNode, toNode, cost));
 }
-std::vector<Connection*> Graph::GetConnections(Vector2D n)
-{
-	return std::vector<Connection*>();
-}
-void Graph::GenerateConnections()
-{
 
+void Graph::drawConnections() {
+	for (int i = 0; i < connections.size(); i++) {
+		SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)connections[i]->GetFromNode()->x, (int)connections[i]->GetFromNode()->y, (int)connections[i]->GetToNode()->x, (int)connections[i]->GetToNode()->y);
+	}
 }

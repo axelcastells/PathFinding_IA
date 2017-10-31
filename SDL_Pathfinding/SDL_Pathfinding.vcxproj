@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Agent.cpp" />
+    <ClCompile Include="..\src\Connection.cpp" />
     <ClCompile Include="..\src\Graph.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PathFinder.cpp" />

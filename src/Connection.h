@@ -3,7 +3,7 @@
 class Connection
 {
 public:
-	Connection();
+	Connection(Vector2D* _fromNode, Vector2D* _toNode, float _cost);
 	float GetCost();
 	Vector2D* GetFromNode();
 	Vector2D* GetToNode();

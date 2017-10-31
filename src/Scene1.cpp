@@ -106,7 +106,7 @@ void Scene1::update(float dtime, SDL_Event *event)
 			}
 			currentTargetIndex++;
 		}
-
+		terrainGraph;
 		currentTarget = path.points[currentTargetIndex];
 		Vector2D steering_force = agents[0]->Behavior()->Seek(agents[0], currentTarget, dtime);
 		agents[0]->update(steering_force, dtime, event);
@@ -134,6 +134,7 @@ void Scene1::draw()
 		{
 			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), 0, j, SRC_WIDTH, j);
 		}
+		terrainGraph.drawConnections();
 	}
 
 	for (int i = 0; i < (int)path.points.size(); i++)
@@ -281,8 +282,31 @@ void Scene1::initMaze()
 	{
 		for (int j = 0; j < num_cell_y; j++)
 		{
-			if (terrain[i][j] != 0) {
-				//comprovar 4 veins
+			if (terrain[i][j] == 1) {
+				//Left node
+				if (i - 1 >= 0 && terrain[i - 1][j] == 1) {
+					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					Vector2D toNode((float)((i-1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					terrainGraph.addConnection(&fromNode, &toNode, 1);
+				}
+				//Right node
+				if (i + 1 < terrain.size() && terrain[i + 1][j] == 1) {
+					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					Vector2D toNode((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					terrainGraph.addConnection(&fromNode, &toNode, 1);
+				}
+				//Up node
+				if (j - 1 >= 0 && terrain[i][j-1] == 1) {
+					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					Vector2D toNode((float)((i)*CELL_SIZE + offset), (float)((j-1)*CELL_SIZE + offset));
+					terrainGraph.addConnection(&fromNode, &toNode, 1);
+				}
+				//Down node
+				if (j + 1 < terrain[i].size() && terrain[i][j+1] == 1) {
+					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
+					Vector2D toNode((float)((i)*CELL_SIZE + offset), (float)((j+1)*CELL_SIZE + offset));
+					terrainGraph.addConnection(&fromNode, &toNode, 1);
+				}
 			}
 		}
 	}
