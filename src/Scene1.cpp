@@ -8,8 +8,8 @@ Scene1::Scene1()
 
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
-	initMaze();
 	terrainGraph = Graph();
+	initMaze();
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
 	Agent *agent = new Agent;
@@ -121,7 +121,7 @@ void Scene1::draw()
 {
 	drawMaze();
 	drawCoin();
-
+	
 
 	if (draw_grid)
 	{
@@ -285,27 +285,19 @@ void Scene1::initMaze()
 			if (terrain[i][j] == 1) {
 				//Left node
 				if (i - 1 >= 0 && terrain[i - 1][j] == 1) {
-					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					Vector2D toNode((float)((i-1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					terrainGraph.addConnection(&fromNode, &toNode, 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), 1);
 				}
 				//Right node
 				if (i + 1 < terrain.size() && terrain[i + 1][j] == 1) {
-					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					Vector2D toNode((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					terrainGraph.addConnection(&fromNode, &toNode, 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), 1);
 				}
 				//Up node
 				if (j - 1 >= 0 && terrain[i][j-1] == 1) {
-					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					Vector2D toNode((float)((i)*CELL_SIZE + offset), (float)((j-1)*CELL_SIZE + offset));
-					terrainGraph.addConnection(&fromNode, &toNode, 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), 1);
 				}
 				//Down node
 				if (j + 1 < terrain[i].size() && terrain[i][j+1] == 1) {
-					Vector2D fromNode((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset));
-					Vector2D toNode((float)((i)*CELL_SIZE + offset), (float)((j+1)*CELL_SIZE + offset));
-					terrainGraph.addConnection(&fromNode, &toNode, 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), 1);
 				}
 			}
 		}
