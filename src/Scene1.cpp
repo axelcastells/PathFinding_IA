@@ -299,8 +299,14 @@ void Scene1::initMaze()
 				if (j + 1 < terrain[i].size() && terrain[i][j+1] == 1) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), 1);
 				}
+
+				
+
 			}
 		}
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 1);
 	}
 
 }

@@ -12,6 +12,7 @@ public:
 	~Graph();
 	void addConnection(Vector2D *fromNode, Vector2D *toNode, float cost);
 	void drawConnections();
+
 private:
 	std::vector<Connection*> connections;
 };
