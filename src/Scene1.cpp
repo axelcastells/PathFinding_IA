@@ -285,28 +285,28 @@ void Scene1::initMaze()
 			if (terrain[i][j] == 1) {
 				//Left node
 				if (i - 1 >= 0 && terrain[i - 1][j] == 1) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, 1);
 				}
 				//Right node
 				if (i + 1 < terrain.size() && terrain[i + 1][j] == 1) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, 1);
 				}
 				//Up node
 				if (j - 1 >= 0 && terrain[i][j-1] == 1) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), i, j, 1);
 				}
 				//Down node
 				if (j + 1 < terrain[i].size() && terrain[i][j+1] == 1) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), i, j, 1);
 				}
 
-				
+				std::cout << "Position x: " << i << " Position y: " << j << endl;
 
 			}
 		}
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 1);
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 1);
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 1);
+		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 1);
+		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 1);
+		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 1);
 	}
 
 }
