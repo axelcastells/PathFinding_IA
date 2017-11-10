@@ -180,8 +180,6 @@ bool Agent::loadSpriteTexture(char* filename, int _num_frames)
 	return true;
 }
 
-void Agent::SetPathFinderGraph(Graph* g) {
-
-	pathFinder = new PathFinder(g);
-
+void Agent::SetPathFinderGraph(Path* p, Graph* g) {
+	pathFinder = new PathFinder(p, g);
 }

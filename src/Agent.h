@@ -56,7 +56,7 @@ public:
 	void update(Vector2D steering_force, float dtime, SDL_Event *event);
 	void draw();
 	bool Agent::loadSpriteTexture(char* filename, int num_frames=1);
-	void SetPathFinderGraph(Graph* g);
+	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
 	
 };

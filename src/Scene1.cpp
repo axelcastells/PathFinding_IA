@@ -22,7 +22,7 @@ Scene1::Scene1()
 	while (!isValidCell(rand_cell))
 		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	agents[0]->setPosition(cell2pix(rand_cell));
-	agents[0]->SetPathFinderGraph(&terrainGraph);
+	agents[0]->SetPathFinderGraph(&path, &terrainGraph);
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);

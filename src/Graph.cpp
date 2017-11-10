@@ -20,6 +20,7 @@ void Graph::drawConnections() {
 }
 
 std::vector<std::pair<Vector2D*,float>> Graph::getNextNodes(int i, int j) {
+
 	std::vector<std::pair<Vector2D*, float>> nextNodes;
 	std::pair <std::multimap<std::pair<int, int>, Connection*>::iterator, std::multimap<std::pair<int, int>, Connection*>::iterator> rangeIterator = connections.equal_range(std::pair<int, int>(i, j));
 	for (std::multimap<std::pair<int, int>, Connection*>::iterator it = rangeIterator.first; it != rangeIterator.second; ++it) {
