@@ -15,6 +15,8 @@ PathFinder::PathFinder(){ }
 
 void PathFinder::BFS(Vector2D *startPoint, Vector2D *targetPoint)
 {
+	pathFound = false;
+
 	std::queue<Vector2D*> frontier;
 	frontier.push(startPoint);
 
@@ -36,24 +38,28 @@ void PathFinder::BFS(Vector2D *startPoint, Vector2D *targetPoint)
 
 			if (visited.count(std::pair<float, float>(next.first->x, next.first->y)) == 0) {
 				frontier.push(next.first);
-				visited.emplace(next.first, current);
+				visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
 				draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
-				if (*next.first == *targetPoint) {
-					break;
-				}
+
 			}
 		}
 
 	}
 
-	//current = targetPoint;
-	//path->points.push_back(*current);
+	current = targetPoint;
+	std::vector<Vector2D> pathPoints;
+	pathPoints.push_back(*current);
 
-	//while (current != startPoint) {
-	//	//current = visited.;
-	//	path->points.push_back(*current);
-	//	draw_circle(TheApp::Instance()->getRenderer(), (int)current->x, (int)current->y, 14, 255, 255, 255, 255);
-	//}
+	while (*current != *startPoint) {
+		current = visited[std::pair<float,float>(current->x, current->y)];
+		pathPoints.push_back(*current);
+		draw_circle(TheApp::Instance()->getRenderer(), (int)current->x, (int)current->y, 14, 255, 255, 255, 255);
+	}
 
+	for (int i = pathPoints.size() - 1; i >= 0; i--) {
+		path->points.push_back(pathPoints[i]);
+	}
+	
+	pathFound = true;
 	
 }

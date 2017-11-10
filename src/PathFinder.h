@@ -12,6 +12,7 @@ public:
 	PathFinder(Graph* g);
 	PathFinder();
 	~PathFinder() {}
+	bool pathFound;
 
 	void BFS(Vector2D *startPoint, Vector2D *targetPoint); //Breadth First Search
 private:

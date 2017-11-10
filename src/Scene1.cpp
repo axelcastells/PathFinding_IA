@@ -32,6 +32,7 @@ Scene1::Scene1()
 	// PathFollowing next Target
 	currentTarget = Vector2D(0, 0);
 	currentTargetIndex = -1;
+	agents[0]->searchActive = true;
 
 }
 
@@ -95,6 +96,8 @@ void Scene1::update(float dtime, SDL_Event *event)
 					if (pix2cell(agents[0]->getPosition()) == coinPosition)
 					{
 						coinPosition = Vector2D(-1, -1);
+						//Indicam que el nou path no ha estat trobat
+						agents[0]->pathFinder->pathFound = false;
 						while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition()))<3))
 							coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 					}

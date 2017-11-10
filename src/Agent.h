@@ -24,8 +24,7 @@ private:
 	Vector2D velocity;
 	Vector2D target;
 
-	PathFinder *pathFinder;
-	SearchAlgorithm currentAlgorithm = BFS;
+
 
 	float mass;
 	float orientation;
@@ -58,5 +57,7 @@ public:
 	bool Agent::loadSpriteTexture(char* filename, int num_frames=1);
 	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
+	PathFinder *pathFinder;
+	SearchAlgorithm currentAlgorithm = BFS;
 	
 };
