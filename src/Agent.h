@@ -7,17 +7,25 @@
 #include "Vector2D.h"
 #include "utils.h"
 #include "SteeringBehavior.h"
-
+#include "PathFinder.h"
 
 class Agent
 {
 	friend class SteeringBehavior;
+
+	enum SearchAlgorithm
+	{
+		BFS, DIJSTRA, GREEDY, ASTAR
+	};
 
 private:
 	SteeringBehavior *steering_behavior;
 	Vector2D position;
 	Vector2D velocity;
 	Vector2D target;
+
+	PathFinder *pathFinder;
+	SearchAlgorithm currentAlgorithm = BFS;
 
 	float mass;
 	float orientation;
@@ -48,5 +56,7 @@ public:
 	void update(Vector2D steering_force, float dtime, SDL_Event *event);
 	void draw();
 	bool Agent::loadSpriteTexture(char* filename, int num_frames=1);
+	void SetPathFinderGraph(Graph* g);
+	bool searchActive;
 	
 };

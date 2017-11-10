@@ -15,8 +15,10 @@ Agent::Agent() : sprite_texture(0),
 	             sprite_w(0),
 	             sprite_h(0),
 	             draw_sprite(false)
+
 {
 	steering_behavior = new SteeringBehavior;
+	searchActive = false;
 }
 
 Agent::~Agent()
@@ -85,8 +87,10 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 	switch (event->type) {
 		/* Keyboard & Mouse events */
 	case SDL_KEYDOWN:
-		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
 			draw_sprite = !draw_sprite;
+			searchActive = true;
+		}			
 		break;
 	default:
 		break;
@@ -110,6 +114,25 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 	if (position.y < 0) position.y = TheApp::Instance()->getWinSize().y;
 	if (position.x > TheApp::Instance()->getWinSize().x) position.x = 0;
 	if (position.y > TheApp::Instance()->getWinSize().y) position.y = 0;
+
+	if (searchActive) {
+		switch (currentAlgorithm)
+		{
+		case Agent::BFS:
+			pathFinder->BFS(&position, &target);
+			break;
+		case Agent::DIJSTRA:
+			break;
+		case Agent::GREEDY:
+			break;
+		case Agent::ASTAR:
+			break;
+		default:
+			break;
+		}
+	}
+	
+
 }
 
 void Agent::draw()
@@ -155,4 +178,10 @@ bool Agent::loadSpriteTexture(char* filename, int _num_frames)
 		SDL_FreeSurface(image);
 
 	return true;
+}
+
+void Agent::SetPathFinderGraph(Graph* g) {
+
+	pathFinder = new PathFinder(g);
+
 }

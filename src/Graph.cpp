@@ -5,7 +5,6 @@ Graph::~Graph() {}
 void Graph::addConnection(Vector2D *fromNode, Vector2D *toNode, int xCell, int yCell, float cost)
 {
 	connections.emplace(std::pair<int,int>(xCell, yCell), new Connection(fromNode, toNode, cost));
-	//connections.push_back(new Connection(fromNode, toNode, cost));
 }
 
 void Graph::drawConnections() {

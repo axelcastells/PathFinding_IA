@@ -22,6 +22,7 @@ Scene1::Scene1()
 	while (!isValidCell(rand_cell))
 		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	agents[0]->setPosition(cell2pix(rand_cell));
+	agents[0]->SetPathFinderGraph(&terrainGraph);
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);
@@ -50,11 +51,12 @@ Scene1::~Scene1()
 void Scene1::update(float dtime, SDL_Event *event)
 {
 	/* Keyboard & Mouse events */
-	
+	agents[0]->setTarget(cell2pix(coinPosition));
 	switch (event->type) {
 	case SDL_KEYDOWN:
 		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
 			draw_grid = !draw_grid;
+
 		break;
 	case SDL_MOUSEMOTION:
 	case SDL_MOUSEBUTTONDOWN:
@@ -134,7 +136,6 @@ void Scene1::draw()
 		{
 			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), 0, j, SRC_WIDTH, j);
 		}
-		terrainGraph.drawConnections();
 	}
 
 	for (int i = 0; i < (int)path.points.size(); i++)
@@ -308,12 +309,16 @@ void Scene1::initMaze()
 			}
 		}
 
-		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 1);
-		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 1);
-		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 0, 10, 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 0, 11, 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 0, 12, 1);
+
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 39, 10, 1);
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 39, 11, 1);
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 39, 12, 1);
 	}
 
-	vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(39, 11);
+	vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(0,0);
 	for (int i = 0; i < tmp.size(); ++i) {
 		cout << "Possible next node: " << i + 1 << " X: " << (int)tmp[i].first->x / CELL_SIZE << " Y: " << (int)tmp[i].first->y / CELL_SIZE << " with cost: " << tmp[i].second << endl;
 	}
