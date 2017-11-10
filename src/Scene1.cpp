@@ -278,6 +278,7 @@ void Scene1::initMaze()
 
 		}
 	}
+
 	for (int i = 0; i < num_cell_x; i++)
 	{
 		for (int j = 0; j < num_cell_y; j++)
@@ -286,27 +287,35 @@ void Scene1::initMaze()
 				//Left node
 				if (i - 1 >= 0 && terrain[i - 1][j] == 1) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, 1);
+					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j << endl;
 				}
 				//Right node
 				if (i + 1 < terrain.size() && terrain[i + 1][j] == 1) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, 1);
+					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i + 1 << " Position y: " << j << endl;
 				}
 				//Up node
 				if (j - 1 >= 0 && terrain[i][j-1] == 1) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), i, j, 1);
+					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i << " Position y: " << j - 1 << endl;
 				}
 				//Down node
 				if (j + 1 < terrain[i].size() && terrain[i][j+1] == 1) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), i, j, 1);
+					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j + 1 << endl;
 				}
-
-				std::cout << "Position x: " << i << " Position y: " << j << endl;
 
 			}
 		}
+
 		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 1);
 		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 1);
 		//terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 1);
+	}
+
+	vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(39, 11);
+	for (int i = 0; i < tmp.size(); ++i) {
+		cout << "Possible next node: " << i + 1 << " X: " << (int)tmp[i].first->x / CELL_SIZE << " Y: " << (int)tmp[i].first->y / CELL_SIZE << " with cost: " << tmp[i].second << endl;
 	}
 
 }

@@ -14,9 +14,10 @@ public:
 	~Graph();
 	void addConnection(Vector2D *fromNode, Vector2D *toNode, int yCell, int xCell, float cost);
 	void drawConnections();
+	std::vector<std::pair<Vector2D*, float>> getNextNodes(int i, int j);
+	std::vector<std::pair<Vector2D*, float>> getNextNodes(Vector2D v);
 
 private:
 	//Pair column ordered, ordered (y,x)
-	std::map<std::pair<int, int>, Connection*> connections;
-	//std::vector<Connection*> connections;
+	std::multimap<std::pair<int, int>, Connection*> connections;
 };
