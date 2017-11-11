@@ -114,6 +114,9 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 	if (position.x > TheApp::Instance()->getWinSize().x) position.x = 0;
 	if (position.y > TheApp::Instance()->getWinSize().y) position.y = 0;
 
+	
+		
+
 	if (searchActive && !pathFinder->pathFound) {
 		switch (currentAlgorithm)
 		{

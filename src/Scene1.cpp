@@ -60,7 +60,7 @@ void Scene1::update(float dtime, SDL_Event *event)
 
 		break;
 	case SDL_MOUSEMOTION:
-	case SDL_MOUSEBUTTONDOWN:
+	/*case SDL_MOUSEBUTTONDOWN:
 		if (event->button.button == SDL_BUTTON_LEFT)
 		{
 			Vector2D cell = pix2cell(Vector2D((float)(event->button.x), (float)(event->button.y)));
@@ -73,12 +73,14 @@ void Scene1::update(float dtime, SDL_Event *event)
 				path.points.push_back(cell2pix(cell));
 			}
 		}
-		break;
+		break;*/
 	default:
 		break;
 	}
-	if ((currentTargetIndex == -1) && (path.points.size()>0))
+	if ((currentTargetIndex == -1) && (path.points.size() > 0)) {
 		currentTargetIndex = 0;
+	}
+		
 
 	if (currentTargetIndex >= 0)
 	{
@@ -106,15 +108,52 @@ void Scene1::update(float dtime, SDL_Event *event)
 				{
 					Vector2D steering_force = agents[0]->Behavior()->Arrive(agents[0], currentTarget, path.ARRIVAL_DISTANCE, dtime);
 					agents[0]->update(steering_force, dtime, event);
+					
 				}
 				return;
 			}
 			currentTargetIndex++;
 		}
-		terrainGraph;
+		
 		currentTarget = path.points[currentTargetIndex];
 		Vector2D steering_force = agents[0]->Behavior()->Seek(agents[0], currentTarget, dtime);
 		agents[0]->update(steering_force, dtime, event);
+
+		if (currentTargetIndex >= 0 && currentTargetIndex + 1 < path.points.size()) {
+
+			if (currentTarget.x == 0 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 10 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 39 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 10 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(39 * CELL_SIZE + CELL_SIZE / 2, 10 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+			else if (currentTarget.x == 39 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 10 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 0 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 10 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(0 * CELL_SIZE + CELL_SIZE / 2, 10 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+			else if (currentTarget.x == 0 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 11 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 39 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 11 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(39 * CELL_SIZE + CELL_SIZE / 2, 11 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+			else if (currentTarget.x == 39 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 11 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 0 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 11 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(0 * CELL_SIZE + CELL_SIZE / 2, 11 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+			else if (currentTarget.x == 0 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 12 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 39 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 12 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(39 * CELL_SIZE + CELL_SIZE / 2, 12 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+			else if (currentTarget.x == 39 * CELL_SIZE + CELL_SIZE / 2 && currentTarget.y == 12 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].x == 0 * CELL_SIZE + CELL_SIZE / 2 && path.points[currentTargetIndex + 1].y == 12 * CELL_SIZE + CELL_SIZE / 2) {
+				agents[0]->setPosition(Vector2D(0 * CELL_SIZE + CELL_SIZE / 2, 12 * CELL_SIZE + CELL_SIZE / 2));
+				currentTargetIndex++;
+				currentTarget = path.points[currentTargetIndex];
+			}
+		}
+		
+
 	}
 	else
 	{
@@ -144,8 +183,10 @@ void Scene1::draw()
 	for (int i = 0; i < (int)path.points.size(); i++)
 	{
 		draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
-		if (i > 0)
-			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+
+		if (i > 0) {
+			//SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		}			
 	}
 
 	draw_circle(TheApp::Instance()->getRenderer(), (int)currentTarget.x, (int)currentTarget.y, 15, 255, 0, 0, 255);
@@ -321,10 +362,10 @@ void Scene1::initMaze()
 		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 39, 12, 1);
 	}
 
-	vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(0,0);
-	for (int i = 0; i < tmp.size(); ++i) {
+	//vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(0,0);
+	/*for (int i = 0; i < tmp.size(); ++i) {
 		cout << "Possible next node: " << i + 1 << " X: " << (int)tmp[i].first->x / CELL_SIZE << " Y: " << (int)tmp[i].first->y / CELL_SIZE << " with cost: " << tmp[i].second << endl;
-	}
+	}*/
 
 }
 

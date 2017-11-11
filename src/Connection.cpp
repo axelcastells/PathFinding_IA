@@ -17,3 +17,7 @@ Vector2D* Connection::GetFromNode() {
 Vector2D* Connection::GetToNode() {
 	return toNode;
 }
+
+bool operator<(Connection& c1, Connection& c2) {
+	return c1.GetCost() < c2.GetCost();
+}
