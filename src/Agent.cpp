@@ -123,7 +123,8 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 		case Agent::BFS:
 			pathFinder->BFS(&position, &target);
 			break;
-		case Agent::DIJSTRA:
+		case Agent::DIJKSTRA:
+			pathFinder->Dijkstra(&position, &target);
 			break;
 		case Agent::GREEDY:
 			break;

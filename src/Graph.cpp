@@ -32,3 +32,8 @@ std::vector<std::pair<Vector2D*,float>> Graph::getNextNodes(int i, int j) {
 std::vector<std::pair<Vector2D*, float>> Graph::getNextNodes(Vector2D v) {
 	return getNextNodes((int)v.x / CELL_SIZE, (int)v.y / CELL_SIZE);	
 }
+
+Connection* Graph::getConnectionIn(Vector2D v) {
+	std::multimap<std::pair<int, int>, Connection*>::iterator it = connections.find(std::pair<int, int> ((int)v.x / CELL_SIZE, (int)v.y / CELL_SIZE));
+	return it->second;
+}

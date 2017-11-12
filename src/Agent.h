@@ -15,7 +15,7 @@ class Agent
 
 	enum SearchAlgorithm
 	{
-		BFS, DIJSTRA, GREEDY, ASTAR
+		BFS, DIJKSTRA, GREEDY, ASTAR
 	};
 
 private:
@@ -58,6 +58,6 @@ public:
 	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
 	PathFinder *pathFinder;
-	SearchAlgorithm currentAlgorithm = BFS;
+	SearchAlgorithm currentAlgorithm = DIJKSTRA;
 	
 };
