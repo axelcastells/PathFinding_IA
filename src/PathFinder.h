@@ -16,6 +16,10 @@ public:
 
 	void BFS(Vector2D *startPoint, Vector2D *targetPoint); //Breadth First Search
 	void Dijkstra(Vector2D *startPoint, Vector2D *targetPoint); //Dijkstra Search
+	void Greedy(Vector2D *startPoint, Vector2D *targetPoint); //Greedy Best First Search
+
+	float heuristic(Vector2D a, Vector2D b);
+
 private:
 	Graph* graph;
 	Path* path;
