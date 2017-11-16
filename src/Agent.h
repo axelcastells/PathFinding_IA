@@ -58,6 +58,6 @@ public:
 	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
 	PathFinder *pathFinder;
-	SearchAlgorithm currentAlgorithm = DIJKSTRA;
+	SearchAlgorithm currentAlgorithm = ASTAR;
 	
 };

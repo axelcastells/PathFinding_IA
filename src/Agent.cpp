@@ -130,6 +130,7 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 			pathFinder->Greedy(&position, &target);
 			break;
 		case Agent::ASTAR:
+			pathFinder->AStar(&position, &target);
 			break;
 		default:
 			break;
