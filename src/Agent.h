@@ -9,6 +9,8 @@
 #include "SteeringBehavior.h"
 #include "PathFinder.h"
 
+#define CURRENT_ALG SearchAlgorithm::ASTAR
+
 class Agent
 {
 	friend class SteeringBehavior;
@@ -58,6 +60,5 @@ public:
 	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
 	PathFinder *pathFinder;
-	SearchAlgorithm currentAlgorithm = ASTAR;
-	
+	SearchAlgorithm currentAlgorithm = CURRENT_ALG;
 };
