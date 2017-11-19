@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#define MAX_COINS 3
+
 Scene1::Scene1()
 {
 	draw_grid = false;
@@ -16,6 +18,7 @@ Scene1::Scene1()
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agents.push_back(agent);
 
+	currentCoinIndex = 0;
 
 	// set agent position coords to the center of a random cell
 	Vector2D rand_cell(-1, -1);
@@ -25,14 +28,21 @@ Scene1::Scene1()
 	agents[0]->SetPathFinderGraph(&path, &terrainGraph);
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
-	coinPosition = Vector2D(-1, -1);
-	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell)<3))
-		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+	for (int i = 0; i < MAX_COINS; i++)
+	{
+		coinPosition.push_back(Vector2D(-1, -1));
+		//Vector2D tempCoin = Vector2D(-1, -1);
+		while ((!isValidCell(coinPosition[i])) || (Vector2D::Distance(coinPosition[i], rand_cell)<3))
+			coinPosition[i] = (Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y)));
+	}
+
 
 	// PathFollowing next Target
 	currentTarget = Vector2D(0, 0);
 	currentTargetIndex = -1;
 	agents[0]->searchActive = true;
+
+	waypointCount = MAX_COINS;
 
 }
 
@@ -52,7 +62,7 @@ Scene1::~Scene1()
 void Scene1::update(float dtime, SDL_Event *event)
 {
 	/* Keyboard & Mouse events */
-	agents[0]->setTarget(cell2pix(coinPosition));
+	
 	switch (event->type) {
 	case SDL_KEYDOWN:
 		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
@@ -77,10 +87,14 @@ void Scene1::update(float dtime, SDL_Event *event)
 	default:
 		break;
 	}
+
+
+	agents[0]->setTarget(cell2pix(coinPosition[currentCoinIndex]));
+
 	if ((currentTargetIndex == -1) && (path.points.size() > 0)) {
 		currentTargetIndex = 0;
 	}
-		
+
 
 	if (currentTargetIndex >= 0)
 	{
@@ -95,26 +109,45 @@ void Scene1::update(float dtime, SDL_Event *event)
 					currentTargetIndex = -1;
 					agents[0]->setVelocity(Vector2D(0, 0));
 					// if we have arrived to the coin, replace it ina random cell!
-					if (pix2cell(agents[0]->getPosition()) == coinPosition)
+					
+					if (pix2cell(agents[0]->getPosition()) == coinPosition[currentCoinIndex])
 					{
-						coinPosition = Vector2D(-1, -1);
+						currentCoinIndex++;
+						//---
+						//coinPosition[currentCoinIndex] = Vector2D(-1, -1);
 						//Indicam que el nou path no ha estat trobat
 						agents[0]->pathFinder->pathFound = false;
-						while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition()))<3))
-							coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+						if (currentCoinIndex >= coinPosition.size())
+						{
+							for (int i = 0; i < coinPosition.size(); i++)
+							{
+								//coinPosition[currentCoinIndex] = Vector2D(-1, -1);
+								//Indicam que el nou path no ha estat trobat
+								agents[0]->pathFinder->pathFound = false;
+								//coinPosition.push_back(Vector2D(-1, -1));
+								//Vector2D tempCoin = Vector2D(-1, -1);
+								while ((!isValidCell(coinPosition[i])) || (Vector2D::Distance(coinPosition[i], pix2cell(agents[0]->getPosition()))<3))
+									coinPosition[i] = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+								
+							}
+
+							currentCoinIndex = 0;
+						}
+
 					}
 				}
 				else
 				{
 					Vector2D steering_force = agents[0]->Behavior()->Arrive(agents[0], currentTarget, path.ARRIVAL_DISTANCE, dtime);
 					agents[0]->update(steering_force, dtime, event);
-					
+
 				}
 				return;
 			}
 			currentTargetIndex++;
 		}
-		
+
 		currentTarget = path.points[currentTargetIndex];
 		Vector2D steering_force = agents[0]->Behavior()->Seek(agents[0], currentTarget, dtime);
 		agents[0]->update(steering_force, dtime, event);
@@ -152,19 +185,31 @@ void Scene1::update(float dtime, SDL_Event *event)
 				currentTarget = path.points[currentTargetIndex];
 			}
 		}
-		
+
 
 	}
 	else
 	{
 		agents[0]->update(Vector2D(0, 0), dtime, event);
+		//if (currentCoinIndex < coinPosition.size())
+		//{
+		//	currentCoinIndex++;
+		//	agents[0]->setTarget(cell2pix(coinPosition[currentCoinIndex]));
+		//	currentTargetIndex = 0;
+		//}
 	}
+	
 }
 
 void Scene1::draw()
 {
 	drawMaze();
-	drawCoin();
+
+	for each (Vector2D c in coinPosition)
+	{
+		drawCoin(c);
+	}
+	//drawCoin();
 	
 
 	if (draw_grid)
@@ -214,9 +259,9 @@ void Scene1::drawMaze()
 	}
 }
 
-void Scene1::drawCoin()
+void Scene1::drawCoin(Vector2D pos)
 {
-	Vector2D coin_coords = cell2pix(coinPosition);
+	Vector2D coin_coords = cell2pix(pos);
 	int offset = CELL_SIZE / 2;
 	SDL_Rect dstrect = { (int)coin_coords.x - offset, (int)coin_coords.y - offset, CELL_SIZE, CELL_SIZE };
 	SDL_RenderCopy(TheApp::Instance()->getRenderer(), coin_texture, NULL, &dstrect);

@@ -17,7 +17,8 @@ public:
 	const char* getTitle();
 private:
 	std::vector<Agent*> agents;
-	Vector2D coinPosition;
+	int currentCoinIndex;
+	std::vector<Vector2D> coinPosition;
 	Vector2D currentTarget;
 	int currentTargetIndex;
 	Path path;
@@ -26,7 +27,7 @@ private:
 	bool draw_grid;
 	std::vector<SDL_Rect> maze_rects;
 	void drawMaze();
-	void drawCoin();
+	void drawCoin(Vector2D pos);
 	SDL_Texture *background_texture;
 	SDL_Texture *coin_texture;
 	void initMaze();
@@ -35,5 +36,6 @@ private:
 	Vector2D cell2pix(Vector2D cell);
 	Vector2D pix2cell(Vector2D pix);
 	bool isValidCell(Vector2D cell);
+	int waypointCount;
 	Graph terrainGraph;
 };
