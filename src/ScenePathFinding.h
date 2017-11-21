@@ -6,7 +6,7 @@
 #include "Path.h"
 #include "Graph.h"
 
-#define COINS 1
+#define COINS 8
 
 class Scene_WaypointPathFinding :
 	public Scene
