@@ -4,19 +4,23 @@
 #include "Scene.h"
 #include "Agent.h"
 #include "Path.h"
+#include "Graph.h"
 
-class ScenePathFinding :
+#define COINS 1
+
+class Scene_WaypointPathFinding :
 	public Scene
 {
 public:
-	ScenePathFinding();
-	~ScenePathFinding();
+	Scene_WaypointPathFinding();
+	~Scene_WaypointPathFinding();
 	void update(float dtime, SDL_Event *event);
 	void draw();
 	const char* getTitle();
 private:
 	std::vector<Agent*> agents;
-	Vector2D coinPosition;
+	std::vector<Vector2D> coinPosition;
+	float currentTargetCoinIndex;
 	Vector2D currentTarget;
 	int currentTargetIndex;
 	Path path;
@@ -34,5 +38,5 @@ private:
 	Vector2D cell2pix(Vector2D cell);
 	Vector2D pix2cell(Vector2D pix);
 	bool isValidCell(Vector2D cell);
-
+	Graph terrainGraph;
 };

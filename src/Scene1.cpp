@@ -12,7 +12,7 @@ Scene1::Scene1()
 	initMaze();
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
-	Agent *agent = new Agent;
+	Agent *agent = new Agent(DEFAULT_ALG);
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agents.push_back(agent);
 

@@ -19,7 +19,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new ScenePathFinding;
+	Scene *curr_scene = new Scene1;
 	app->setWindowTitle(curr_scene->getTitle());
 
 	while (!quit)
@@ -41,13 +41,13 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_1)
 			{
 				delete(curr_scene);
-				curr_scene = new ScenePathFinding;
+				curr_scene = new Scene1;
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_2)
 			{
 				delete(curr_scene);
-				curr_scene = new Scene1;
+				curr_scene = new Scene_WaypointPathFinding;
 				app->setWindowTitle(curr_scene->getTitle());
 				
 			}

@@ -232,3 +232,61 @@ void PathFinder::AStar(Vector2D *startPoint, Vector2D *targetPoint)
 
 	pathFound = true;
 }
+
+void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> waypoints)
+{
+	pathFound = false;
+
+	std::priority_queue<std::pair<Vector2D*, float>> frontier;
+	frontier.push(std::pair<Vector2D*, float>(startPoint, 0));
+
+	std::map<std::pair<float, float>, Vector2D*> visited;
+	std::map<std::pair<float, float>, float> costSoFar;
+
+	visited.emplace(std::pair<float, float>(startPoint->x, startPoint->y), startPoint);
+	costSoFar.emplace(std::pair<float, float>(startPoint->x, startPoint->y), 0);
+
+	Vector2D *current;
+
+	for (int i = 0; i < waypoints.size(); i++)
+	{
+		while (!frontier.empty()) {
+			current = frontier.top().first;
+			frontier.pop();
+
+			if (*current == *waypoints[i]) {
+				break;
+			}
+
+			for each (std::pair<Vector2D*, float> next in graph->getNextNodes(*current)) {
+				float newCost = costSoFar[std::pair<float, float>(current->x, current->y)] + next.second;
+				if (costSoFar.count(std::pair<float, float>(next.first->x, next.first->y)) == 0 || newCost < costSoFar[std::pair<float, float>(next.first->x, next.first->y)]) {
+					costSoFar.emplace(std::pair<float, float>(next.first->x, next.first->y), newCost);
+					float priority = heuristic(*waypoints[i], *next.first) + newCost;
+					frontier.push(std::pair<Vector2D*, float>(next.first, -priority));
+					visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
+					draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
+
+				}
+			}
+
+		}
+	}
+
+
+	current = targetPoint;
+	std::vector<Vector2D> pathPoints;
+	pathPoints.push_back(*current);
+
+	while (*current != *startPoint) {
+		current = visited[std::pair<float, float>(current->x, current->y)];
+		pathPoints.push_back(*current);
+		//draw_circle(TheApp::Instance()->getRenderer(), (int)current->x, (int)current->y, 14, 255, 255, 255, 255);
+	}
+
+	for (int i = pathPoints.size() - 1; i >= 0; i--) {
+		path->points.push_back(pathPoints[i]);
+	}
+
+	pathFound = true;
+}

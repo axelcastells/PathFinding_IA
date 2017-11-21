@@ -9,15 +9,16 @@
 #include "SteeringBehavior.h"
 #include "PathFinder.h"
 
-#define CURRENT_ALG SearchAlgorithm::ASTAR
+#define DEFAULT_ALG Agent::SearchAlgorithm::ASTAR
 
 class Agent
 {
 	friend class SteeringBehavior;
 
+public:
 	enum SearchAlgorithm
 	{
-		BFS, DIJKSTRA, GREEDY, ASTAR
+		BFS, DIJKSTRA, GREEDY, ASTAR, WAYPOINTS_ASTAR
 	};
 
 private:
@@ -25,6 +26,7 @@ private:
 	Vector2D position;
 	Vector2D velocity;
 	Vector2D target;
+	std::vector<Vector2D*> multiTargetList;
 
 
 
@@ -42,7 +44,7 @@ private:
 	int sprite_h;
 
 public:
-	Agent();
+	Agent(SearchAlgorithm alg);
 	~Agent();
 	SteeringBehavior *Behavior();
 	Vector2D getPosition();
@@ -51,6 +53,7 @@ public:
 	float getMaxVelocity();
 	void setPosition(Vector2D position);
 	void setTarget(Vector2D target);
+	void setMultiTarget(std::vector<Vector2D*> multiTargetList);
 	void setVelocity(Vector2D velocity);
 	void setMass(float mass);
 	void setColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
@@ -60,5 +63,5 @@ public:
 	void SetPathFinderGraph(Path* p, Graph* g);
 	bool searchActive;
 	PathFinder *pathFinder;
-	SearchAlgorithm currentAlgorithm = CURRENT_ALG;
+	SearchAlgorithm currentAlgorithm = DEFAULT_ALG;
 };

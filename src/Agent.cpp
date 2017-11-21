@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Agent::Agent() : sprite_texture(0),
+Agent::Agent(Agent::SearchAlgorithm alg) : sprite_texture(0),
                  position(Vector2D(100, 100)),
 	             target(Vector2D(1000, 100)),
 	             velocity(Vector2D(0,0)),
@@ -19,6 +19,7 @@ Agent::Agent() : sprite_texture(0),
 {
 	steering_behavior = new SteeringBehavior;
 	searchActive = false;
+	currentAlgorithm = alg;
 }
 
 Agent::~Agent()
@@ -62,6 +63,11 @@ void Agent::setPosition(Vector2D _position)
 void Agent::setTarget(Vector2D _target)
 {
 	target = _target;
+}
+
+void Agent::setMultiTarget(std::vector<Vector2D*> _multiTargetList)
+{
+	multiTargetList = _multiTargetList;
 }
 
 void Agent::setVelocity(Vector2D _velocity)
@@ -131,6 +137,9 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 			break;
 		case Agent::ASTAR:
 			pathFinder->AStar(&position, &target);
+			break;
+		case Agent::WAYPOINTS_ASTAR:
+			pathFinder->MultiTargetAStar(&position, multiTargetList);
 			break;
 		default:
 			break;
