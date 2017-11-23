@@ -235,6 +235,11 @@ void PathFinder::AStar(Vector2D *startPoint, Vector2D *targetPoint)
 
 void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> waypoints)
 {
-	AStar(startPoint, waypoints[0]);
+	Vector2D *temp = startPoint;
+	for (int i = 0; i < waypoints.size(); i++) {
+		AStar(temp, waypoints[i]);
+		temp = waypoints[i];
+	}
+	
 	//AStar(startPoint, waypoints[1]);
 }

@@ -32,6 +32,13 @@ Scene_WaypointPathFinding::Scene_WaypointPathFinding()
 			coinsPositions[i] = new Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	}
 
+	std::vector<Vector2D*> tempCoins;
+	for (int i = 0; i < coinsPositions.size(); i++)
+	{
+		tempCoins.push_back(new Vector2D(cell2pix(*coinsPositions[i])));
+	}
+
+	agents[0]->setMultiTarget(tempCoins);
 
 	// PathFollowing next Target
 	currentTarget = Vector2D(0, 0);
@@ -55,16 +62,44 @@ Scene_WaypointPathFinding::~Scene_WaypointPathFinding()
 
 void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 {
-
-	//ERROR STARTS HERE
-	//------------------
-	std::vector<Vector2D*> tempCoins;
-	for (int i = 0; i < coinsPositions.size(); i++)
-	{
-		tempCoins.push_back(new Vector2D(pix2cell(Vector2D(coinsPositions[i]->x, coinsPositions[i]->y))));
+	// Coin found detection
+	for (int i = 0; i < coinsPositions.size(); i++) {
+		if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i] || abs(Vector2D::Distance(pix2cell(agents[0]->getPosition()), *coinsPositions[i])) < 2.0) {
+			coinsPositions.erase(coinsPositions.begin() + i);
+		}
 	}
+
+	if (coinsPositions.size() == 0) {
+		// set agent position coords to the center of a random cell
+		Vector2D rand_cell(-1, -1);
+		while (!isValidCell(rand_cell))
+			rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+		path.points.clear();
+		currentTargetIndex = -1;
+		agents[0]->setVelocity(Vector2D(0, 0));
+
+		agents[0]->SetPathFinderGraph(&path, &terrainGraph);
+
+		// set the coin in a random cell (but at least 3 cells far from the agent)
+		for (int i = 0; i < COINS; i++)
+		{
+			coinsPositions.push_back(new Vector2D(-1, -1));
+			while ((!isValidCell(*coinsPositions[i])) || (Vector2D::Distance(*coinsPositions[i], rand_cell)<3))
+				coinsPositions[i] = new Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+		}
+
+		std::vector<Vector2D*> tempCoins;
+		for (int i = 0; i < coinsPositions.size(); i++)
+		{
+			tempCoins.push_back(new Vector2D(cell2pix(*coinsPositions[i])));
+		}
+
+		agents[0]->setMultiTarget(tempCoins);
+	}
+
 	/* Keyboard & Mouse events */
-	agents[0]->setMultiTarget(coinsPositions);
+
 	switch (event->type) {
 	case SDL_KEYDOWN:
 		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
@@ -106,15 +141,23 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 					path.points.clear();
 					currentTargetIndex = -1;
 					agents[0]->setVelocity(Vector2D(0, 0));
-					//// if we have arrived to the coin, replace it ina random cell!
-					//if (pix2cell(agents[0]->getPosition()) == coinsPositions)
-					//{
-					//	coinsPositions = Vector2D(-1, -1);
-					//	//Indicam que el nou path no ha estat trobat
-					//	agents[0]->pathFinder->pathFound = false;
-					//	while ((!isValidCell(coinsPositions)) || (Vector2D::Distance(coinsPositions, pix2cell(agents[0]->getPosition()))<3))
-					//		coinsPositions = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+					
+					
+
+					//for (int i = 0; i < coinsPositions.size(); i++) {
+					//	if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i])
+					//	{
+					//		Vector2D rand_cell = Vector2D(-1, -1);
+					//		//Indicam que el nou path no ha estat trobat
+					//		agents[0]->pathFinder->pathFound = false;
+
+					//		coinsPositions.push_back(new Vector2D(-1, -1));
+					//		while ((!isValidCell(*coinsPositions[i])) || (Vector2D::Distance(*coinsPositions[i], rand_cell)<3))
+					//			coinsPositions[i] = new Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+					//	}
 					//}
+
 				}
 				else
 				{
