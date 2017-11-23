@@ -6,7 +6,7 @@
 #include "Path.h"
 #include "Graph.h"
 
-#define COINS 8
+#define COINS 3
 
 class Scene_WaypointPathFinding :
 	public Scene
@@ -19,7 +19,7 @@ public:
 	const char* getTitle();
 private:
 	std::vector<Agent*> agents;
-	std::vector<Vector2D> coinPosition;
+	std::vector<Vector2D*> coinsPositions;
 	float currentTargetCoinIndex;
 	Vector2D currentTarget;
 	int currentTargetIndex;
