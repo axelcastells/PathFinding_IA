@@ -170,7 +170,9 @@ void PathFinder::Greedy(Vector2D *startPoint, Vector2D *targetPoint) {
 
 }
 
-float PathFinder::heuristic(Vector2D a, Vector2D b) {
+float PathFinder::heuristic(Vector2D _a, Vector2D _b) {
+	Vector2D a ((float)((int)_a.x / CELL_SIZE), (float)((int)_a.y / CELL_SIZE));
+	Vector2D b ((float)((int)_b.x / CELL_SIZE), (float)((int)_b.y / CELL_SIZE));
 	return (float)(abs(a.x - b.x) + abs(a.y - b.y));
 }
 

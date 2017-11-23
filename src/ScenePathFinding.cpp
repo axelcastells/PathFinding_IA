@@ -64,7 +64,7 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 {
 	// Coin found detection
 	for (int i = 0; i < coinsPositions.size(); i++) {
-		if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i] || abs(Vector2D::Distance(pix2cell(agents[0]->getPosition()), *coinsPositions[i])) < 2.0) {
+		if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i] || abs(Vector2D::Distance(pix2cell(currentTarget), *coinsPositions[i])) < 1.0) {
 			coinsPositions.erase(coinsPositions.begin() + i);
 		}
 	}
@@ -235,14 +235,14 @@ void Scene_WaypointPathFinding::draw()
 		}
 	}
 
-	//for (int i = 0; i < terrain.size(); i++)
-	//{
-	//	for (int j = 0; j < terrain[i].size(); j++)
-	//	{
-	//		if(terrain[i][j]==1)
-	//			draw_circle(TheApp::Instance()->getRenderer(), (float)((i)*CELL_SIZE + (CELL_SIZE/2)), (float)((j)*CELL_SIZE + (CELL_SIZE / 2)), 10, ((int)i + j) + 1, 255 - (((int)i + j) + 1), 0, 255);
-	//	}
-	//}
+	for (int i = 0; i < terrain.size(); i++)
+	{
+		for (int j = 0; j < terrain[i].size(); j++)
+		{
+			if(terrain[i][j]==1)
+				draw_circle(TheApp::Instance()->getRenderer(), (float)((i)*CELL_SIZE + (CELL_SIZE/2)), (float)((j)*CELL_SIZE + (CELL_SIZE / 2)), 10, ((int)i + j) + 1, 255 - (((int)i + j) + 1), 0, 255);
+		}
+	}
 
 	for (int i = 0; i < (int)path.points.size(); i++)
 	{
@@ -400,24 +400,24 @@ void Scene_WaypointPathFinding::initMaze()
 	{
 		for (int j = 0; j < num_cell_y; j++)
 		{
-			if (terrain[i][j] == 1) {
+			if (terrain[i][j] > 0) {
 				//Left node
-				if (i - 1 >= 0 && terrain[i - 1][j] == 1) {
+				if (i - 1 >= 0 && terrain[i - 1][j] > 0) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j << endl;
 				}
 				//Right node
-				if (i + 1 < terrain.size() && terrain[i + 1][j] == 1) {
+				if (i + 1 < terrain.size() && terrain[i + 1][j] > 0) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i + 1 << " Position y: " << j << endl;
 				}
 				//Up node
-				if (j - 1 >= 0 && terrain[i][j - 1] == 1) {
+				if (j - 1 >= 0 && terrain[i][j - 1] > 0) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i << " Position y: " << j - 1 << endl;
 				}
 				//Down node
-				if (j + 1 < terrain[i].size() && terrain[i][j + 1] == 1) {
+				if (j + 1 < terrain[i].size() && terrain[i][j + 1] > 0) {
 					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j + 1 << endl;
 				}
