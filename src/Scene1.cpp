@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Scene1::Scene1()
+Scene1::Scene1(Agent::SearchAlgorithm alg)
 {
 	draw_grid = false;
 
@@ -12,7 +12,7 @@ Scene1::Scene1()
 	initMaze();
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
-	Agent *agent = new Agent(DEFAULT_ALG);
+	Agent *agent = new Agent(alg);
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agents.push_back(agent);
 

@@ -10,7 +10,7 @@ class Scene1 :
 	public Scene
 {
 public:
-	Scene1();
+	Scene1(Agent::SearchAlgorithm alg);
 	~Scene1();
 	void update(float dtime, SDL_Event *event);
 	void draw();
