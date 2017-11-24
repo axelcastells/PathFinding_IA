@@ -15,6 +15,10 @@ public:
 	void update(float dtime, SDL_Event *event);
 	void draw();
 	const char* getTitle();
+
+	// Rects to draw frontier
+	std::vector<SDL_Rect> frontier_rects;
+
 private:
 	std::vector<Agent*> agents;
 	Vector2D coinPosition;
@@ -27,6 +31,7 @@ private:
 	std::vector<SDL_Rect> maze_rects;
 	void drawMaze();
 	void drawCoin();
+	void drawFrontier();
 	SDL_Texture *background_texture;
 	SDL_Texture *coin_texture;
 	void initMaze();

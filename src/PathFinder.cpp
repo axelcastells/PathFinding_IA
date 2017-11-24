@@ -15,6 +15,7 @@ PathFinder::PathFinder(){ }
 
 void PathFinder::BFS(Vector2D *startPoint, Vector2D *targetPoint)
 {
+	frontierRects.clear();
 	pathFound = false;
 
 	std::queue<Vector2D*> frontier;
@@ -38,6 +39,8 @@ void PathFinder::BFS(Vector2D *startPoint, Vector2D *targetPoint)
 
 			if (visited.count(std::pair<float, float>(next.first->x, next.first->y)) == 0) {
 				frontier.push(next.first);
+				SDL_Rect rect = { next.first->x - CELL_SIZE / 2, next.first->y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE};
+				frontierRects.push_back(rect);
 				visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
 				draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
 
@@ -66,7 +69,7 @@ void PathFinder::BFS(Vector2D *startPoint, Vector2D *targetPoint)
 
 void PathFinder::Dijkstra(Vector2D *startPoint, Vector2D *targetPoint)
 {
-	
+	frontierRects.clear();
 	pathFound = false;
 
 	std::priority_queue<std::pair<Vector2D*,float>> frontier;
@@ -93,6 +96,8 @@ void PathFinder::Dijkstra(Vector2D *startPoint, Vector2D *targetPoint)
 			if (costSoFar.count(std::pair<float, float>(next.first->x, next.first->y)) == 0 || newCost < costSoFar[std::pair<float,float>(next.first->x,next.first->y)]) {
 				costSoFar.emplace(std::pair<float, float>(next.first->x, next.first->y), newCost);
 				frontier.push(std::pair<Vector2D*, float>(next.first, -newCost));
+				SDL_Rect rect = { next.first->x - CELL_SIZE / 2, next.first->y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE };
+				frontierRects.push_back(rect);
 				visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
 				draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
 
@@ -119,7 +124,7 @@ void PathFinder::Dijkstra(Vector2D *startPoint, Vector2D *targetPoint)
 }
 
 void PathFinder::Greedy(Vector2D *startPoint, Vector2D *targetPoint) {
-
+	frontierRects.clear();
 	pathFound = false;
 
 	std::priority_queue<std::pair<Vector2D*, float>> frontier;
@@ -144,6 +149,8 @@ void PathFinder::Greedy(Vector2D *startPoint, Vector2D *targetPoint) {
 			if (visited.count(std::pair<float, float>(next.first->x, next.first->y)) == 0 ) {
 				float priority = heuristic(*targetPoint, *next.first);
 				frontier.push(std::pair<Vector2D*, float>(next.first, -priority));
+				SDL_Rect rect = { next.first->x - CELL_SIZE / 2, next.first->y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE };
+				frontierRects.push_back(rect);
 				visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
 				draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
 
@@ -170,19 +177,10 @@ void PathFinder::Greedy(Vector2D *startPoint, Vector2D *targetPoint) {
 
 }
 
-float PathFinder::heuristic(Vector2D _a, Vector2D _b) {
-	Vector2D a ((float)((int)_a.x / CELL_SIZE), (float)((int)_a.y / CELL_SIZE));
-	Vector2D b ((float)((int)_b.x / CELL_SIZE), (float)((int)_b.y / CELL_SIZE));
-	return (float)(abs(a.x - b.x) + abs(a.y - b.y));
-}
-
-bool operator<(const std::pair<Vector2D*, float>& c1, const std::pair<Vector2D*, float>& c2) {
-	return c1.second < c2.second;
-}
 
 void PathFinder::AStar(Vector2D *startPoint, Vector2D *targetPoint)
 {
-
+	frontierRects.clear();
 	pathFound = false;
 
 	std::priority_queue<std::pair<Vector2D*, float>> frontier;
@@ -210,6 +208,8 @@ void PathFinder::AStar(Vector2D *startPoint, Vector2D *targetPoint)
 				costSoFar.emplace(std::pair<float, float>(next.first->x, next.first->y), newCost);
 				float priority = heuristic(*targetPoint, *next.first) + newCost;
 				frontier.push(std::pair<Vector2D*, float>(next.first, -priority));
+				SDL_Rect rect = { next.first->x - CELL_SIZE / 2, next.first->y - CELL_SIZE / 2, CELL_SIZE, CELL_SIZE };
+				frontierRects.push_back(rect);
 				visited.emplace(std::pair<float, float>(next.first->x, next.first->y), current);
 				draw_circle(TheApp::Instance()->getRenderer(), (int)next.first->x, (int)next.first->y, 14, 255, 0, 0, 255);
 
@@ -237,11 +237,10 @@ void PathFinder::AStar(Vector2D *startPoint, Vector2D *targetPoint)
 
 void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> waypoints)
 {
+	frontierRects.clear();
 	std::map<float, Vector2D*> tempReorder;
 	Vector2D *temp = startPoint;
 	std::vector<Vector2D*>::iterator it;
-
-	//int i = 0;
 	
 
 	while(!waypoints.empty())
@@ -276,4 +275,18 @@ void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> w
 		AStar(temp, waypoints[i]);
 		temp = waypoints[i];
 	}
+}
+
+float PathFinder::heuristic(Vector2D _a, Vector2D _b) {
+	Vector2D a((float)((int)_a.x / CELL_SIZE), (float)((int)_a.y / CELL_SIZE));
+	Vector2D b((float)((int)_b.x / CELL_SIZE), (float)((int)_b.y / CELL_SIZE));
+	return (float)(abs(a.x - b.x) + abs(a.y - b.y));
+}
+
+bool operator<(const std::pair<Vector2D*, float>& c1, const std::pair<Vector2D*, float>& c2) {
+	return c1.second < c2.second;
+}
+
+std::vector<SDL_Rect> PathFinder::returnFrontier() {
+	return frontierRects;
 }

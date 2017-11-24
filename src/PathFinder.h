@@ -24,7 +24,10 @@ public:
 
 	float heuristic(Vector2D a, Vector2D b);
 
+	std::vector<SDL_Rect> returnFrontier();
+
 private:
 	Graph* graph;
 	Path* path;
+	std::vector<SDL_Rect> frontierRects;
 };

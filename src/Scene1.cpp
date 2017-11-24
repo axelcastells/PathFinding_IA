@@ -163,8 +163,10 @@ void Scene1::update(float dtime, SDL_Event *event)
 
 void Scene1::draw()
 {
+	drawFrontier();
 	drawMaze();
 	drawCoin();
+
 	
 
 	if (draw_grid)
@@ -220,6 +222,16 @@ void Scene1::drawCoin()
 	int offset = CELL_SIZE / 2;
 	SDL_Rect dstrect = { (int)coin_coords.x - offset, (int)coin_coords.y - offset, CELL_SIZE, CELL_SIZE };
 	SDL_RenderCopy(TheApp::Instance()->getRenderer(), coin_texture, NULL, &dstrect);
+}
+
+void Scene1::drawFrontier() {
+	if (draw_grid)
+	{
+		frontier_rects = agents[0]->pathFinder->returnFrontier();
+		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 155, 155, 155, 255);
+		for (unsigned int i = 0; i < frontier_rects.size(); i++)
+			SDL_RenderFillRect(TheApp::Instance()->getRenderer(), &frontier_rects[i]);
+	}
 }
 
 void Scene1::initMaze()
