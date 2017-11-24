@@ -13,7 +13,6 @@ public:
 	Graph();
 	~Graph();
 	void addConnection(Vector2D *fromNode, Vector2D *toNode, int yCell, int xCell, float cost);
-	void drawConnections();
 	std::vector<std::pair<Vector2D*, float>> getNextNodes(int i, int j);
 	std::vector<std::pair<Vector2D*, float>> getNextNodes(Vector2D v);
 	Connection* getConnectionIn(Vector2D v);

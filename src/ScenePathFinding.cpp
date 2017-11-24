@@ -10,6 +10,7 @@ Scene_WaypointPathFinding::Scene_WaypointPathFinding(Agent::SearchAlgorithm alg)
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
 	terrainGraph = Graph();
 	initMaze();
+	initTerrains();
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
 	Agent *agent = new Agent(alg);
@@ -106,21 +107,6 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 			draw_grid = !draw_grid;
 
 		break;
-	case SDL_MOUSEMOTION:
-		/*case SDL_MOUSEBUTTONDOWN:
-		if (event->button.button == SDL_BUTTON_LEFT)
-		{
-		Vector2D cell = pix2cell(Vector2D((float)(event->button.x), (float)(event->button.y)));
-		if (isValidCell(cell))
-		{
-		if (path.points.size() > 0)
-		if (path.points[path.points.size() - 1] == cell2pix(cell))
-		break;
-
-		path.points.push_back(cell2pix(cell));
-		}
-		}
-		break;*/
 	default:
 		break;
 	}
@@ -142,21 +128,6 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 					currentTargetIndex = -1;
 					agents[0]->setVelocity(Vector2D(0, 0));
 					
-					
-
-					//for (int i = 0; i < coinsPositions.size(); i++) {
-					//	if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i])
-					//	{
-					//		Vector2D rand_cell = Vector2D(-1, -1);
-					//		//Indicam que el nou path no ha estat trobat
-					//		agents[0]->pathFinder->pathFound = false;
-
-					//		coinsPositions.push_back(new Vector2D(-1, -1));
-					//		while ((!isValidCell(*coinsPositions[i])) || (Vector2D::Distance(*coinsPositions[i], rand_cell)<3))
-					//			coinsPositions[i] = new Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
-
-					//	}
-					//}
 
 				}
 				else
@@ -219,6 +190,7 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 void Scene_WaypointPathFinding::draw()
 {
 	drawFrontier();
+	drawTerrains();
 	drawMaze();
 	drawCoin();
 
@@ -236,21 +208,9 @@ void Scene_WaypointPathFinding::draw()
 		}
 	}
 
-	for (int i = 0; i < terrain.size(); i++)
-	{
-		for (int j = 0; j < terrain[i].size(); j++)
-		{
-			if(terrain[i][j]==1)
-				draw_circle(TheApp::Instance()->getRenderer(), (float)((i)*CELL_SIZE + (CELL_SIZE/2)), (float)((j)*CELL_SIZE + (CELL_SIZE / 2)), 10, ((int)i + j) + 1, 255 - (((int)i + j) + 1), 0, 255);
-		}
-	}
 
 	for (int i = 0; i < (int)path.points.size(); i++)
 	{
-		//int tmpCost = terrainGraph.getConnectionIn(Vector2D((int)(path.points[i].x), (int)(path.points[i].y)))->GetCost();
-
-		//cout << "Current Path Step Cost: ";
-		//cout << tmpCost << endl;
 
 		draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
 		if (i > 0) {
@@ -293,6 +253,16 @@ void Scene_WaypointPathFinding::drawFrontier() {
 	}
 }
 
+void Scene_WaypointPathFinding::drawTerrains() {
+	if (draw_grid)
+	{
+		
+		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 255, 0, 0, 255);
+		for (unsigned int i = 0; i < terrains.size(); i++)
+			SDL_RenderFillRect(TheApp::Instance()->getRenderer(), &terrains[i].first);
+	}
+}
+
 void Scene_WaypointPathFinding::drawCoin()
 {
 	for each (Vector2D* c in coinsPositions)
@@ -307,8 +277,46 @@ void Scene_WaypointPathFinding::drawCoin()
 
 void Scene_WaypointPathFinding::initTerrains() {
 
-	//SDL_Rect rect = { , , ,  };
-	//terrains.push_back(rect);
+	SDL_Rect rect = { 18 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrain[18][9] = 3.f;
+	terrains.push_back(std::pair<SDL_Rect,float>(rect, 3.f));
+	rect = { 19 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 20 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 19 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 20 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	rect = { 18 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	
 	
 
 }
@@ -454,11 +462,6 @@ void Scene_WaypointPathFinding::initMaze()
 		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 39, 11, ((int)39 + 11) + 1);
 		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 39, 12, ((int)39 + 12) + 1);
 	}
-
-	//vector<pair<Vector2D*, float>> tmp = terrainGraph.getNextNodes(0,0);
-	/*for (int i = 0; i < tmp.size(); ++i) {
-	cout << "Possible next node: " << i + 1 << " X: " << (int)tmp[i].first->x / CELL_SIZE << " Y: " << (int)tmp[i].first->y / CELL_SIZE << " with cost: " << tmp[i].second << endl;
-	}*/
 
 }
 
