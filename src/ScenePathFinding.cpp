@@ -9,8 +9,9 @@ Scene_WaypointPathFinding::Scene_WaypointPathFinding(Agent::SearchAlgorithm alg)
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
 	terrainGraph = Graph();
-	initMaze();
 	initTerrains();
+	initMaze();
+
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
 	Agent *agent = new Agent(alg);
@@ -257,10 +258,18 @@ void Scene_WaypointPathFinding::drawFrontier() {
 void Scene_WaypointPathFinding::drawTerrains() {
 	if (draw_grid)
 	{
-		
-		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 255, 0, 0, 255);
-		for (unsigned int i = 0; i < terrains.size(); i++)
+		for (unsigned int i = 0; i < terrains.size(); i++) {
+			if (terrains[i].second > 400) {
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 255, 0, 0, 255);
+			}
+			else if (terrains[i].second > 3) {
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 100, 0, 0, 255);
+			}
+			else if (terrains[i].second > 1) {
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 50, 0, 0, 255);
+			}
 			SDL_RenderFillRect(TheApp::Instance()->getRenderer(), &terrains[i].first);
+		}
 	}
 }
 
@@ -278,45 +287,78 @@ void Scene_WaypointPathFinding::drawCoin()
 
 void Scene_WaypointPathFinding::initTerrains() {
 
+	float cost1 = 500.f;
+	float cost2 = 2.f;
+	float cost3 = 5.f;
+
 	SDL_Rect rect = { 18 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrain[18][9] = 3.f;
-	terrains.push_back(std::pair<SDL_Rect,float>(rect, 3.f));
-	rect = { 19 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 20 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 18 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 19 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 20 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
-	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost2));
 	rect = { 18 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
 	rect = { 18 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
 	rect = { 18 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
 	rect = { 18 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
 	rect = { 18 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
-	terrains.push_back(std::pair<SDL_Rect, float>(rect, 3.f));
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 19 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost2));
+	rect = { 19 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 19 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 19 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 19 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 19 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 20 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost2));
+	rect = { 20 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 20 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 20 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 20 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 20 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 9 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost2));
+	rect = { 21 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost3));
+	rect = { 18 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost3));
+	rect = { 19 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost3));
+	rect = { 20 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost3));
+	rect = { 21 * CELL_SIZE, 15 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost3));
+	rect = { 18 * CELL_SIZE, 14 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 18 * CELL_SIZE, 13 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 18 * CELL_SIZE, 12 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 18 * CELL_SIZE, 11 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
+	rect = { 18 * CELL_SIZE, 10 * CELL_SIZE, CELL_SIZE,  CELL_SIZE };
+	terrains.push_back(std::pair<SDL_Rect, float>(rect, cost1));
 	
 	
 
@@ -424,6 +466,12 @@ void Scene_WaypointPathFinding::initMaze()
 		}
 	}
 
+	for (int i = 0; i < terrains.size(); i++) {
+
+		terrain[terrains[i].first.x / CELL_SIZE][terrains[i].first.y / CELL_SIZE] = terrains[i].second;
+
+	}
+
 	for (int i = 0; i < num_cell_x; i++)
 	{
 		for (int j = 0; j < num_cell_y; j++)
@@ -431,22 +479,22 @@ void Scene_WaypointPathFinding::initMaze()
 			if (terrain[i][j] > 0) {
 				//Left node
 				if (i - 1 >= 0 && terrain[i - 1][j] > 0) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i - 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, terrain[i - 1][j]);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j << endl;
 				}
 				//Right node
 				if (i + 1 < terrain.size() && terrain[i + 1][j] > 0) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i + 1)*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), i, j, terrain[i + 1][j]);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i + 1 << " Position y: " << j << endl;
 				}
 				//Up node
 				if (j - 1 >= 0 && terrain[i][j - 1] > 0) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j - 1)*CELL_SIZE + offset)), i, j, terrain[i][j - 1]);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i << " Position y: " << j - 1 << endl;
 				}
 				//Down node
 				if (j + 1 < terrain[i].size() && terrain[i][j + 1] > 0) {
-					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), i, j, ((int)i + j) + 1);
+					terrainGraph.addConnection(new Vector2D((float)(i*CELL_SIZE + offset), (float)(j*CELL_SIZE + offset)), new Vector2D((float)((i)*CELL_SIZE + offset), (float)((j + 1)*CELL_SIZE + offset)), i, j, terrain[i][j + 1]);
 					//std::cout << "From Position x: " << i << " Position y: " << j << " To Position x: " << i - 1 << " Position y: " << j + 1 << endl;
 				}
 
@@ -455,13 +503,13 @@ void Scene_WaypointPathFinding::initMaze()
 		}
 		
 
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 0, 10, ((int)0 + 10) + 1);
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 0, 11, ((int)0 + 11) + 1);
-		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 0, 12, ((int)0 + 12) + 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 0, 10, 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 0, 11, 1);
+		terrainGraph.addConnection(new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 0, 12, 1);
 
-		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 39, 10, ((int)39 + 10) + 1);
-		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 39, 11, ((int)39 + 11) + 1);
-		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 39, 12, ((int)39 + 12) + 1);
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(10 * CELL_SIZE + offset)), 39, 10, 1);
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(11 * CELL_SIZE + offset)), 39, 11, 1);
+		terrainGraph.addConnection(new Vector2D((float)(39 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), new Vector2D((float)(0 * CELL_SIZE + offset), (float)(12 * CELL_SIZE + offset)), 39, 12, 1);
 	}
 
 }

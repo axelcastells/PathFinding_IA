@@ -35,11 +35,12 @@ private:
 	void drawMaze();
 	void drawCoin();
 	void drawFrontier();
-
 	void drawTerrains();
+
 	SDL_Texture *background_texture;
 	SDL_Texture *coin_texture;
 	void initMaze();
+
 	// Diferents pesos
 	void initTerrains();
 	std::vector<std::pair<SDL_Rect, float>> terrains;
