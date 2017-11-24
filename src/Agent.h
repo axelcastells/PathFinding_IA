@@ -9,7 +9,7 @@
 #include "SteeringBehavior.h"
 #include "PathFinder.h"
 
-#define DEFAULT_ALG Agent::SearchAlgorithm::ASTAR
+#define DEFAULT_ALG Agent::SearchAlgorithm::BFS
 
 class Agent
 {

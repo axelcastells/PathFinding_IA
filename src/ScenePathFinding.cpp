@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Scene_WaypointPathFinding::Scene_WaypointPathFinding()
+Scene_WaypointPathFinding::Scene_WaypointPathFinding(Agent::SearchAlgorithm alg)
 {
 	draw_grid = false;
 
@@ -12,7 +12,7 @@ Scene_WaypointPathFinding::Scene_WaypointPathFinding()
 	initMaze();
 	loadTextures("../res/maze.png", "../res/coin.png");
 	srand((unsigned int)time(NULL));
-	Agent *agent = new Agent(Agent::SearchAlgorithm::WAYPOINTS_ASTAR);
+	Agent *agent = new Agent(alg);
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agents.push_back(agent);
 

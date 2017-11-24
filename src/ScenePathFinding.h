@@ -12,7 +12,7 @@ class Scene_WaypointPathFinding :
 	public Scene
 {
 public:
-	Scene_WaypointPathFinding();
+	Scene_WaypointPathFinding(Agent::SearchAlgorithm alg);
 	~Scene_WaypointPathFinding();
 	void update(float dtime, SDL_Event *event);
 	void draw();
