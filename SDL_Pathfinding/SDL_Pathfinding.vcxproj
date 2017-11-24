@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\Agent.cpp" />
     <ClCompile Include="..\src\Connection.cpp" />
+    <ClCompile Include="..\src\Debugger.cpp" />
     <ClCompile Include="..\src\Graph.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PathFinder.cpp" />
@@ -145,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\Agent.h" />
     <ClInclude Include="..\src\Connection.h" />
+    <ClInclude Include="..\src\Debugger.h" />
     <ClInclude Include="..\src\Graph.h" />
     <ClInclude Include="..\src\Path.h" />
     <ClInclude Include="..\src\PathFinder.h" />

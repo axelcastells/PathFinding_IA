@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include "Scene.h"
 #include "Vector2D.h"
+#include "Debugger.h"
 
 #define SRC_WIDTH 1280
 #define SRC_HEIGHT 768
@@ -24,6 +25,7 @@ private:
 	float last_update;
 
 public:
+	Debugger debug;
 	SDL_SimpleApp();
 	~SDL_SimpleApp();
 	static SDL_SimpleApp* Instance();

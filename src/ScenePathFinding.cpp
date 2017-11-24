@@ -62,6 +62,7 @@ Scene_WaypointPathFinding::~Scene_WaypointPathFinding()
 
 void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 {
+	
 	// Coin found detection
 	for (int i = 0; i < coinsPositions.size(); i++) {
 		if (pix2cell(agents[0]->getPosition()) == *coinsPositions[i] || abs(Vector2D::Distance(pix2cell(currentTarget), *coinsPositions[i])) < 1.0) {
@@ -214,6 +215,7 @@ void Scene_WaypointPathFinding::update(float dtime, SDL_Event *event)
 	{
 		agents[0]->update(Vector2D(0, 0), dtime, event);
 	}
+
 }
 
 void Scene_WaypointPathFinding::draw()
@@ -236,14 +238,14 @@ void Scene_WaypointPathFinding::draw()
 		}
 	}
 
-	for (int i = 0; i < terrain.size(); i++)
-	{
-		for (int j = 0; j < terrain[i].size(); j++)
-		{
-			if(terrain[i][j]==1)
-				draw_circle(TheApp::Instance()->getRenderer(), (float)((i)*CELL_SIZE + (CELL_SIZE/2)), (float)((j)*CELL_SIZE + (CELL_SIZE / 2)), 10, ((int)i + j) + 1, 255 - (((int)i + j) + 1), 0, 255);
-		}
-	}
+	//for (int i = 0; i < terrain.size(); i++)
+	//{
+	//	for (int j = 0; j < terrain[i].size(); j++)
+	//	{
+	//		if(terrain[i][j]==1)
+	//			draw_circle(TheApp::Instance()->getRenderer(), (float)((i)*CELL_SIZE + (CELL_SIZE/2)), (float)((j)*CELL_SIZE + (CELL_SIZE / 2)), 10, ((int)i + j) + 1, 255 - (((int)i + j) + 1), 0, 255);
+	//	}
+	//}
 
 	for (int i = 0; i < (int)path.points.size(); i++)
 	{
@@ -253,9 +255,9 @@ void Scene_WaypointPathFinding::draw()
 		//cout << tmpCost << endl;
 
 		draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
-		if (i > 0) {
-			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
-		}
+		//if (i > 0) {
+		//	SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		//}
 	}
 
 	draw_circle(TheApp::Instance()->getRenderer(), (int)currentTarget.x, (int)currentTarget.y, 15, 255, 0, 0, 255);

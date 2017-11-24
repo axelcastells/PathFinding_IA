@@ -38,6 +38,10 @@ int main(int argc, char ** argv)
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
+			if (event.key.keysym.scancode == SDL_SCANCODE_R)
+			{
+				SDL_SimpleApp::Instance()->debug.Reset();
+			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_1)
 			{
 				delete(curr_scene);

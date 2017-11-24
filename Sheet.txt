@@ -1,0 +1,16 @@
+|------AA2: Pathfinding | Instruccions------|
+
+INPUT		DESCRIPCIO
+Tecla 1: 	Carrega BFS
+Tecla 2: 	Carrega Dijkstra
+Tecla 3: 	Carrega Greedy
+Tecla 4: 	Carrega A*
+Tecla F1: 	Carrega A* Multitarget
+Tecla Espai: 	On/Off Render de la frontera
+
+En la consola, es mostra el debugger amb les dades
+de l'ultim algorisme utilitzat.
+Es mostren tant el mínim com el màxim nombre de nodes
+explorats i s'acumulen entre execucions simultànies
+del mateix algorisme.
+Es pot forçar un reset del debugger amb la tecla 'R'.
