@@ -241,16 +241,20 @@ void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> w
 	Vector2D *temp = startPoint;
 	std::vector<Vector2D*>::iterator it;
 
-	std::pair<int, float> lastIndexedHeuristics = std::pair<int,float>(0,100000);
+	//int i = 0;
+	
 
-	for (int i = 0; i < waypoints.size(); i++)
+	while(!waypoints.empty())
 	{
+		std::pair<int, float> lastIndexedHeuristics = std::pair<int, float>(0, 100000);// index | heuristic
+
 		for (int j = 0; j < waypoints.size(); j++)
 		{
-			if (lastIndexedHeuristics.second > heuristic(*temp, *waypoints[j]))
+			float tempHeur = heuristic(*temp, *waypoints[j]);
+			if (lastIndexedHeuristics.second > tempHeur)
 			{
 				lastIndexedHeuristics.first = j;
-				lastIndexedHeuristics.second = heuristic(*temp, *waypoints[j]);
+				lastIndexedHeuristics.second = tempHeur;
 			}
 		}
 
@@ -260,6 +264,11 @@ void PathFinder::MultiTargetAStar(Vector2D *startPoint, std::vector<Vector2D*> w
 		it = waypoints.begin();
 		std::advance(it, lastIndexedHeuristics.first);
 		waypoints.erase(it);
+	}
+
+	for (std::map<float, Vector2D*>::iterator it = tempReorder.begin(); it != tempReorder.end(); it++)
+	{
+		waypoints.push_back(it->second);
 	}
 
 	temp = startPoint;
