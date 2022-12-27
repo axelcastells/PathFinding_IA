@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Agent::Agent() : sprite_texture(0),
+Agent::Agent(Agent::SearchAlgorithm alg) : sprite_texture(0),
                  position(Vector2D(100, 100)),
 	             target(Vector2D(1000, 100)),
 	             velocity(Vector2D(0,0)),
@@ -15,8 +15,11 @@ Agent::Agent() : sprite_texture(0),
 	             sprite_w(0),
 	             sprite_h(0),
 	             draw_sprite(false)
+
 {
 	steering_behavior = new SteeringBehavior;
+	searchActive = false;
+	currentAlgorithm = alg;
 }
 
 Agent::~Agent()
@@ -62,6 +65,11 @@ void Agent::setTarget(Vector2D _target)
 	target = _target;
 }
 
+void Agent::setMultiTarget(std::vector<Vector2D*> _multiTargetList)
+{
+	multiTargetList = _multiTargetList;
+}
+
 void Agent::setVelocity(Vector2D _velocity)
 {
 	velocity = _velocity;
@@ -85,8 +93,9 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 	switch (event->type) {
 		/* Keyboard & Mouse events */
 	case SDL_KEYDOWN:
-		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+		if (event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
 			draw_sprite = !draw_sprite;
+		}			
 		break;
 	default:
 		break;
@@ -110,6 +119,34 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 	if (position.y < 0) position.y = TheApp::Instance()->getWinSize().y;
 	if (position.x > TheApp::Instance()->getWinSize().x) position.x = 0;
 	if (position.y > TheApp::Instance()->getWinSize().y) position.y = 0;
+
+	
+		
+
+	if (searchActive && !pathFinder->pathFound) {
+		switch (currentAlgorithm)
+		{
+		case Agent::BFS:
+			pathFinder->BFS(&position, &target);
+			break;
+		case Agent::DIJKSTRA:
+			pathFinder->Dijkstra(&position, &target);
+			break;
+		case Agent::GREEDY:
+			pathFinder->Greedy(&position, &target);
+			break;
+		case Agent::ASTAR:
+			pathFinder->AStar(&position, &target);
+			break;
+		case Agent::WAYPOINTS_ASTAR:
+			pathFinder->MultiTargetAStar(&position, multiTargetList);
+			break;
+		default:
+			break;
+		}
+	}
+	
+
 }
 
 void Agent::draw()
@@ -155,4 +192,8 @@ bool Agent::loadSpriteTexture(char* filename, int _num_frames)
 		SDL_FreeSurface(image);
 
 	return true;
+}
+
+void Agent::SetPathFinderGraph(Path* p, Graph* g) {
+	pathFinder = new PathFinder(p, g);
 }

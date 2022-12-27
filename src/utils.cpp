@@ -93,3 +93,8 @@ void draw_circle(SDL_Renderer *surface, int n_cx, int n_cy, int rad, Uint8 r, Ui
 		}
 	}
 }
+
+long remap(long x, long in_min, long in_max, long out_min, long out_max)
+{
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
